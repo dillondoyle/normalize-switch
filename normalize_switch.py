@@ -2377,11 +2377,6 @@ VERY IMPORTANT: Return ONLY the company name and nothing else."""},
 ]
 
 
-
-
-
-
-
 person_format = {
 
     "voter_id":{
@@ -2398,18 +2393,16 @@ person_format = {
     },
 
     "first_name":{
-        "case":"title",
+        "case":"names_title_case",
         "type":"str",
-        "min_length":2,
-        "min_length_alt_col":"first_initial",
-        "alpha_only":True,
-        "exclude_chars":"[=+~#!@$%^*/()?;:<>[]"
+        "exclude_chars":r"[^\p{L}\-' ]",
+        "remove_profanity":True
     },
     "middle_name":{
-        "case":"title",
+         "case":"names_title_case",
         "type":"str",
-        "alpha_only":True,
-        "exclude_chars":"[=+~#!@$%^*/()?;:<>[]"
+        "exclude_chars":r"[^\p{L}\-' ]",
+        "remove_profanity":True
     },
     "middle_initial":{
         "case":"upper",
@@ -2423,28 +2416,26 @@ person_format = {
         "length":1,
         "alpha_only":True
     },
-        "first_initial":{
+    "first_initial":{
         "case":"upper",
         "type":"str",
         "length":1,
         "alpha_only":True
     },
     "last_name":{
-        "case":"title",
+        "case":"names_title_case",
         "type":"str",
-        "min_length":2,
-        "min_length_alt_col":"last_initial",
-        "alpha_only":True,
-        "exclude_chars":"[=+~#!@$%^*/()?;:<>[]"
+        "exclude_chars":r"[^\p{L}\-' ]",
+        "remove_profanity":True
     },
     "suffix":{
         "type":"str"
     },
     "full_name":{
-        #"case":"title",
+        "case":"names_title_case",
         "type":"str",
-        #"alpha_only":True,
-        "exclude_chars":"[=+~#!@$%^*/()?;:<>[]"
+        "exclude_chars":r"[^\p{L}\-' ]",
+        "remove_profanity":True
     },
     "birth_year":{
         "type":"int",
@@ -2714,7 +2705,6 @@ person_format = {
         "max_length":2
     },
 
-    #phone_numbers
     "provided_email":{
         "case":"lower",
         "type":"str"
