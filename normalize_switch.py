@@ -2395,14 +2395,30 @@ person_format = {
     "first_name":{
         "case":"names_title_case",
         "type":"str",
-        "exclude_chars":r"[^\p{L}\-' ]",
-        "remove_profanity":True
+        "exclude_chars":'[!@#$%^&*()_=+`~,./?<>?;:\'"[\]{}\\|0-9]',
+        "remove_profanity":True,
+        "strip_strings":True
     },
     "middle_name":{
          "case":"names_title_case",
         "type":"str",
-        "exclude_chars":r"[^\p{L}\-' ]",
-        "remove_profanity":True
+        "exclude_chars":'[!@#$%^&*()_=+`~,./?<>?;:\'"[\]{}\\|0-9]',
+        "remove_profanity":True,
+        "strip_strings":True
+    },
+    "last_name":{
+        "case":"names_title_case",
+        "type":"str",
+        "exclude_chars":'[!@#$%^&*()_=+`~,./?<>?;:\'"[\]{}\\|0-9]',
+        "remove_profanity":True,
+        "strip_strings":True
+    },
+    "full_name":{
+        "case":"names_title_case",
+        "type":"str",
+        "exclude_chars":'[!@#$%^&*()_=+`~,./?<>?;:\'"[\]{}\\|0-9]',
+        "remove_profanity":True,
+        "strip_strings":True
     },
     "middle_initial":{
         "case":"upper",
@@ -2422,21 +2438,11 @@ person_format = {
         "length":1,
         "alpha_only":True
     },
-    "last_name":{
-        "case":"names_title_case",
-        "type":"str",
-        "exclude_chars":r"[^\p{L}\-' ]",
-        "remove_profanity":True
-    },
+    
     "suffix":{
         "type":"str"
     },
-    "full_name":{
-        "case":"names_title_case",
-        "type":"str",
-        "exclude_chars":r"[^\p{L}\-' ]",
-        "remove_profanity":True
-    },
+    
     "birth_year":{
         "type":"int",
         "length":4
@@ -2790,6 +2796,11 @@ person_format = {
         #TODO acceptable values
         "alpha_only":True,
         "exclude_chars":"[a-zA-Z]"
+    },
+    "gender_modeled":{
+        "case":"upper",
+        "type":"str",
+        "options":["MALE","FEMALE","OTHER","NON-BINARY","GENDER-FLUID"]
     },
 
     #TODO ??
