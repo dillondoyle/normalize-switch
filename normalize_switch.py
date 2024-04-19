@@ -2395,28 +2395,28 @@ person_format = {
     "first_name":{
         "case":"names_title_case",
         "type":"str",
-        "exclude_chars":'[!@#$%^&*()_=+`~,./?<>?;:\'"[\]{}\\|0-9]',
+        "exclude_chars":"[\p{L}\-' ]+",
         "remove_profanity":True,
         "strip_strings":True
     },
     "middle_name":{
          "case":"names_title_case",
         "type":"str",
-        "exclude_chars":'[!@#$%^&*()_=+`~,./?<>?;:\'"[\]{}\\|0-9]',
+        "exclude_chars":"[\p{L}\-' ]+",
         "remove_profanity":True,
         "strip_strings":True
     },
     "last_name":{
         "case":"names_title_case",
         "type":"str",
-        "exclude_chars":'[!@#$%^&*()_=+`~,./?<>?;:\'"[\]{}\\|0-9]',
+        "exclude_chars":"[\p{L}\-' ]+",
         "remove_profanity":True,
         "strip_strings":True
     },
     "full_name":{
         "case":"names_title_case",
         "type":"str",
-        "exclude_chars":'[!@#$%^&*()_=+`~,./?<>?;:\'"[\]{}\\|0-9]',
+        "exclude_chars":"[\p{L}\-' ]+", #'[!@#$%^&*()_=+`~./?<>?;:\'"[\]{}\\|0-9]',
         "remove_profanity":True,
         "strip_strings":True
     },
