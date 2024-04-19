@@ -664,7 +664,7 @@ common_employers = {
     "20th century fox entertainment":"20th Century Fox",
     "20th century fox television":"20th Century Fox",
     "20th century fox tv":"20th Century Fox",
-    "international business machines":"IBM",
+    "ibm":"IBM",
 
     "Shwab":"Charles Schwab",
     "Schwab":"Charles Schwab",
@@ -761,7 +761,11 @@ common_employers = {
 
     "linkedin corporation":"LinkedIn",
 
-    "usda forest service":"U.S. Forest Service",
+    "usda":"U.S. Department of Agriculture",
+    "u.s. department of agriculture":"U.S. Department of Agriculture",
+    "u.s.d.a":"U.S. Department of Agriculture",
+
+    "us forest service":"U.S. Forest Service",
     "forst service":"U.S. Forest Service",
     "usfs":"U.S. Forest Service",
 
