@@ -1,4 +1,4 @@
-
+import re
 custom_field_types = [dict,list,str,int,float,bool]#,type(None) should have already exited if none
 
 
@@ -670,7 +670,7 @@ common_employers = {
     "Schwab":"Charles Schwab",
     "Schwab & Co.":"Charles Schwab",
 
-    "google.com":"Google",
+    "google.com":"Google", #llama-3-70b gets Alphabet Inc.
     "google llc":"Google",
     "google":"Google",
     "google, inc.":"Google",
@@ -2028,9 +2028,26 @@ address_replacements = {
 #EMAILS
 
 
-top_domains = ["yahoo.com","aim.com", "aol.com","ski.com", "att.net", "juno.com", "frontier.com", "frontiernet.net", "bellsouth.net", "btinternet.com", "charter.net", "comcast.net", "cox.net", "earthlink.net", "gmail.com", "google.com", "googlemail.com", "icloud.com","qwest.net", "mac.com", "me.com", "msn.com", "optonline.net", "optusnet.com.au","cs.com", "qq.com", "q.com","rocketmail.com", "rogers.com", "sbcglobal.net", "shaw.ca", "sky.com", "sympatico.ca", "telus.net", "verizon.net", "web.de", "xtra.co.nz", "ymail.com", "yahoo.com", "hotmail.com", "hotmail.co.uk", "hotmail.fr", "yahoo.fr", "wanadoo.fr", "orange.fr", "yahoo.co.uk", "yahoo.com.br", "yahoo.co.in", "live.com", "rediffmail.com", "free.fr", "gmx.de", "yandex.ru", "libero.it", "outlook.com", "uol.com.br", "bol.com.br", "mail.ru", "hotmail.it", "sfr.fr", "live.fr","live.co.uk", "yahoo.es", "dl.com","hotmail.fr","ig.com.br", "live.nl","nc.rr.com","countrywide.com","email.arizona.edu","netzero.net","rochester.rr.com","du.edu","colorado.edu","bhfs.com","dpsk12.org","ecentral.com","centurylink.net","mindspring.com","law.du.edu","hollandhart.com", "bigpond.com", "terra.com.br", "yahoo.it", "neuf.fr", "yahoo.de", "alice.it", "laposte.net", "facebook.com", "yahoo.in", "hotmail.es", "yahoo.ca", "yahoo.com.au", "rambler.ru", "hotmail.de","geocities.com","blackplanet.com","compuserve.com", "tiscali.it", "yahoo.co.jp", "freenet.de", "t-online.de", "aliceadsl.fr", "virgilio.it", "home.nl", "telenet.be", "yahoo.com.ar", "tiscali.co.uk", "yahoo.com.mx", "voila.fr", "gmx.net", "mail.com", "planet.nl", "tin.it", "live.it", "ntlworld.com", "arcor.de", "yahoo.co.id", "frontiernet.net", "hetnet.nl", "live.com.au", "yahoo.com.sg", "zonnet.nl", "club-internet.fr", "blueyonder.co.uk", "bluewin.ch", "skynet.be", "windstream.net", "centurytel.net", "chello.nl", "live.ca", "bigpond.net.au"]
-bad_phrases = ["fake@hotmail.com","politicalemail","example.com","no___reply","no__reply","no_reply","noreply","donotemail","fake@fake.com","fake.com","iwontreadyourshit@gmail.com","donotemailme@noname.com","smith@none.net","donotemail", "donotcontact", "fakeemail", "fake.com","123456","contoso.com", "noemail", "example.net", "example.org", "mailinator.com","none@none.com","none@noemail.com","none@gmail.com","none@email.com","none@no.com","none.com","none.co","no.com","no.co","none.com","noone.com"]
-suppress_domains_contains = ["mothershipstrategies.com","mainedems.org","endcitizensunited.org","hidebox","westrb","ovaki","congressional","congress","senate","nottrack","norack","mailinator","congress","senate","governor","steveodorisio.com","crestedbuttenews.com","fox31.com","denvernewshd","aspendailynews","morgancarroll","leedriscoll.com","kazba.com","kazba.co","jenaforcolorado.com","johnwalshforcolorado.com","aschkinasi.com","kathleenformontana.com","kusterforcongress.com","audreyforcongress.com","www.susieleeforcongress.com","hiral4congress.com","getthegreendeal.com","fortgangforassembly.com","tomohalleran.com","hiralforcongress.com","debbieforcongress.com","floridadems.org","cindyaxneforcongress.com","lindseysimmons.com","bollierforkansas.com","wilmotcollins.com","teresaforall.com","ginaortizjones.com","jaredgoldenforcongress.com","yesonnationalpopularvote.com","droptheacalawsuit.com","montanademocrats.org","stephendaniel.com","ritahart.com","votebymailpetition.com","teamsterpowerslate.com","griswoldataorcolorado.org ","xavierforvirginia.com","mivecinotogether.com","boebertmustgo.com","mindsovershootings.com","stewartnavarre.com","ridemocrats.org","denverdems.net","jasonminnicozzi.com","tedescoforcongress.com","ballardataormontana.com","normoyleforcongress.com","matsuiforcongress.com","evertonblair.com","davidpeterson.us","electkatiedean.com","kenrussellforflorida.com","adamforcolorado.com","drkathleenharder.com","marlinga4congress.com","cisconv.co","sarahmorgenthau.com","electblackwomenpac.com","sarahkleehoodny.com","sandeepfortexas.com","dcpa.org","healthnetco.com","educationnorthwest.org","denverwater.org","kiowacountyindependent.com","shermanhoward.com","jacksonkelly.com","boulderchamber.com","burgsimpson.com","irelandstapleton.com","googlegroups.com","re-law.com","broncos.nfl.net","mountainstatestoyota.com","rockymountainnews.com","westword.com","denverpost.com","dp.com"]
+top_domains = ["yahoo.com","aim.com", "aol.com","ski.com", "att.net", "juno.com", "frontier.com", "frontiernet.net", "bellsouth.net", "btinternet.com", "charter.net", "comcast.net", "cox.net", "earthlink.net", "gmail.com", "google.com", 
+    "googlemail.com", "icloud.com","qwest.net", "mac.com", "me.com", "msn.com", "optonline.net", "optusnet.com.au","cs.com", "qq.com", "q.com","rocketmail.com", "rogers.com", "sbcglobal.net", "shaw.ca", "sky.com", "sympatico.ca",
+    "nyc.rr.com","roadrunner.com", "rr.com", "twc.com", "brighthouse.com", "rochester.rr.com","nc.rr.com", "socal.rr.com", "san.rr.com", "tampabay.rr.com",
+    "twcny.rr.com", "satx.rr.com", "cfl.rr.com", "sc.rr.com", "neo.rr.com", "wi.rr.com","maine.rr.com",
+    "telus.net", "verizon.net", "web.de", "xtra.co.nz", "ymail.com", "yahoo.com", "hotmail.com", "hotmail.co.uk", "hotmail.fr", "yahoo.fr", "wanadoo.fr", "orange.fr", "yahoo.co.uk", "yahoo.com.br", "yahoo.co.in", "live.com", 
+    "rediffmail.com", "free.fr", "gmx.de", "yandex.ru", "libero.it", "outlook.com", "uol.com.br", "bol.com.br", "mail.ru", "hotmail.it", "sfr.fr", "live.fr","live.co.uk", "yahoo.es", "dl.com","hotmail.fr","ig.com.br", "live.nl",
+    "countrywide.com","email.arizona.edu","netzero.net","du.edu","colorado.edu","bhfs.com","dpsk12.org","ecentral.com","centurylink.net","mindspring.com","law.du.edu","hollandhart.com", "bigpond.com", 
+    "terra.com.br", "yahoo.it", "neuf.fr", "yahoo.de", "alice.it", "laposte.net", "facebook.com", "yahoo.in", "hotmail.es", "yahoo.ca", "yahoo.com.au", "rambler.ru", "hotmail.de","geocities.com","blackplanet.com","compuserve.com",
+    "tiscali.it", "yahoo.co.jp", "freenet.de", "t-online.de", "aliceadsl.fr", "virgilio.it", "home.nl", "telenet.be", "yahoo.com.ar", "tiscali.co.uk", "yahoo.com.mx", "voila.fr", "gmx.net", "mail.com", "planet.nl", "tin.it", "live.it", 
+    "ntlworld.com", "arcor.de", "yahoo.co.id", "frontiernet.net", "hetnet.nl", "live.com.au", "yahoo.com.sg", "zonnet.nl", "club-internet.fr", "blueyonder.co.uk", "bluewin.ch", "skynet.be", "windstream.net", "centurytel.net", "chello.nl", "live.ca", "bigpond.net.au"]
+bad_phrases = ["fake@hotmail.com","politicalemail","example.com","no___reply","no__reply","no_reply","noreply","donotemail","fake@fake.com","fake.com","iwontreadyourshit@gmail.com","donotemailme@noname.com","smith@none.net","donotemail", "donotcontact", "fakeemail", 
+    "fake.com","123456","contoso.com", "noemail", "example.net", "example.org", "mailinator.com","none@none.com","none@noemail.com","none@gmail.com","none@email.com","none@no.com","none.com","none.co","no.com","no.co","none.com","noone.com"]
+suppress_domains_contains = ["mothershipstrategies.com","mainedems.org","endcitizensunited.org","hidebox","westrb","ovaki","congressional","congress","senate","nottrack","norack","mailinator","congress","senate","governor","steveodorisio.com","crestedbuttenews.com",
+    "fox31.com","denvernewshd","aspendailynews","morgancarroll","leedriscoll.com","kazba.com","kazba.co","jenaforcolorado.com","johnwalshforcolorado.com","aschkinasi.com","kathleenformontana.com","kusterforcongress.com","audreyforcongress.com",
+    "www.susieleeforcongress.com","hiral4congress.com","getthegreendeal.com","fortgangforassembly.com","tomohalleran.com","hiralforcongress.com","debbieforcongress.com","floridadems.org","cindyaxneforcongress.com","lindseysimmons.com",
+    "bollierforkansas.com","wilmotcollins.com","teresaforall.com","ginaortizjones.com","jaredgoldenforcongress.com","yesonnationalpopularvote.com","droptheacalawsuit.com","montanademocrats.org","stephendaniel.com","ritahart.com",
+    "votebymailpetition.com","teamsterpowerslate.com","griswoldataorcolorado.org ","xavierforvirginia.com","mivecinotogether.com","boebertmustgo.com","mindsovershootings.com","stewartnavarre.com","ridemocrats.org","denverdems.net",
+    "jasonminnicozzi.com","tedescoforcongress.com","ballardataormontana.com","normoyleforcongress.com","matsuiforcongress.com","evertonblair.com","davidpeterson.us","electkatiedean.com","kenrussellforflorida.com","adamforcolorado.com",
+    "drkathleenharder.com","marlinga4congress.com","cisconv.co","sarahmorgenthau.com","electblackwomenpac.com","sarahkleehoodny.com","sandeepfortexas.com","dcpa.org","healthnetco.com","educationnorthwest.org","denverwater.org",
+    "kiowacountyindependent.com","shermanhoward.com","jacksonkelly.com","boulderchamber.com","burgsimpson.com","irelandstapleton.com","googlegroups.com","re-law.com","broncos.nfl.net","mountainstatestoyota.com","rockymountainnews.com","westword.com","denverpost.com","dp.com"]
 misspelled_tlds = {
     ".comf":".com",
     ".ocm":".com",
@@ -2348,10 +2365,14 @@ actblue_to_datahub_underscore = {
 }
 
 
+test_prompt_two = """Normalize the company name I provide. Your output response needs to be consistent always use the same spelling, capitalization, abbreviation and more. Each company / corporation name needs to be exact so that I can run analytics. 
+Use the most common spelling and format. Do not include explanation, self references or formatting. Reply with only the company name in plain text. If you don't know or don't understand reply None. Use Self Employed or Not Employed for those options.
+Normalize this company name, respond with only the consistent name in plain text: Booz Allen"""
 
 employer_llm_long_prime_conversation_array_start = [
     {"role":"system","content":"""I'm going to provide a company name that a user provided in a form submission. This employer name could be slightly different between user submissions. Since this is user input it can't be trusted and we must clean and filter.
-I will give you a company name. You will respond with an updated and correct company name. Normalize and clean the inputs for global consistency. Use the most common spelling and capitalization pattern. Fix typos. Remove extra spacing and punctuation. For abbreviations like LLC and Inc. use correct abbreviation, punctuation, and capitalization.
+I will give you a company name. You will respond with an updated and correct company name. Normalize and clean the inputs for global consistency. Use the most common spelling and capitalization pattern. Fix typos. Remove extra spacing and punctuation.
+For abbreviations like LLC and Inc. use correct abbreviation, punctuation, and capitalization.
 If there is profanity or it's clearly not a real company return 'None'. If the user is trying to say they are not employed, reply 'Not Employed' . If the user is trying to say they are self employed or own their own company reply 'Self Employed'
 Do not respond with your reasoning. Do not preface the response. Do not self-reference or mention anything about your knowledge or dates of your training data. Do not give excuses. If you do not know the answer or can't give a response simply response with only 'None'
 Respond in plain text with no markings. Do not write more than the correctly formatted company name. Do not put your response in quotes. Use correct punctuation. Remember that some company names can be all capital letters or have no capital letters.
@@ -2399,28 +2420,28 @@ person_format = {
     "first_name":{
         "case":"names_title_case",
         "type":"str",
-        "exclude_chars":"[\p{L}\-' ]+",
+        "exclude_chars": r'[^\w\s\'\-]', #"[\p{L}\-' ]+",
         "remove_profanity":True,
         "strip_strings":True
     },
     "middle_name":{
          "case":"names_title_case",
         "type":"str",
-        "exclude_chars":"[\p{L}\-' ]+",
+        "exclude_chars": r'[^\w\s\'\-]',
         "remove_profanity":True,
         "strip_strings":True
     },
     "last_name":{
         "case":"names_title_case",
         "type":"str",
-        "exclude_chars":"[\p{L}\-' ]+",
+        "exclude_chars": r'[^\w\s\'\-]',
         "remove_profanity":True,
         "strip_strings":True
     },
     "full_name":{
         "case":"names_title_case",
         "type":"str",
-        "exclude_chars":"[\p{L}\-' ]+", #'[!@#$%^&*()_=+`~./?<>?;:\'"[\]{}\\|0-9]',
+        "exclude_chars": r'[^\w\s\'\-]', #'[!@#$%^&*()_=+`~./?<>?;:\'"[\]{}\\|0-9]',
         "remove_profanity":True,
         "strip_strings":True
     },
