@@ -1,4 +1,3 @@
-import re
 custom_field_types = [dict,list,str,int,float,bool]#,type(None) should have already exited if none
 
 
@@ -2016,19 +2015,99 @@ address_replacements = {
     r'\bSUITE\b': 'Suite',
     r'\bDPT\b': 'Department',
     r'\bDEPARTMENT\b': 'Department',
-    r'\bNBR\b': 'Number',
-    r'\bNMBR\b': 'Number',
-    r'\bNUMBER\b': 'Number',
-    r'\ST\b': 'Street',
-    r'\ST.\b': 'Street',
-    r'\bNUMBER\b': 'Number',
+    r'\bNBR\b': '#',
+    r'\bNMBR\b': '#',
+    r'\bNUMBER\b': '#',
+    r'\bST\b': 'Street',
+    r'\bST\.\b': 'Street',
+}
+
+
+# CITIES
+common_city_state_fixes = {
+    'new york': {
+        'nyc': "New York City",
+        'n.y.c.': "New York City",
+        'ny': "New York City",
+    },
+    'utah': {
+        'slc': "Salt Lake City",
+        's.l.c.': "Salt Lake City",
+    },
+    'california': {
+        'sf': "San Francisco",
+        's.f.': "San Francisco",
+        'la': "Los Angeles",
+        'l.a.': "Los Angeles",
+        'sd': "San Diego",
+        's.d.': "San Diego",
+    },
+    'illinois': {
+        'chi': "Chicago",
+        'chitown': "Chicago",
+    },
+    'pennsylvania': {
+        'philly': "Philadelphia",
+    },
+    'arizona': {
+        'phx': "Phoenix",
+    },
+    'nevada': {
+        'vegas': "Las Vegas",
+    },
+    'florida': {
+        'mia': "Miami",
+    },
+    'texas': {
+        'dfw': "Dallas",  # Dallas-Fort Worth Area
+        'hou': "Houston",
+    },
+    'georgia': {
+        'atl': "Atlanta",
+    },
+    'massachusetts': {
+        'beantown': "Boston",
+    },
+    'washington dc': {
+        'dc': "Washington, D.C.",
+        'd.c.': "Washington, D.C.",
+    },
+    'michigan': {
+        'motown': "Detroit",
+    },
+    'washington': {
+        'sea': "Seattle",
+    },
+    'louisiana': {
+        'nola': "New Orleans",
+    },
+    'missouri': {
+        'kc': "Kansas City",
+        'stl': "St. Louis",
+    },
+    'tennessee': {
+        'nash': "Nashville",
+    },
+    'colorado': {
+        'den': "Denver",
+    },
+    'oregon': {
+        'pdx': "Portland",
+    },
+    'minnesota': {
+        'msp': "Minneapolis",
+    },
+    'ohio': {
+        'cincy': "Cincinnati",
+        'cle': "Cleveland",
+    }
 }
 
 
 #EMAILS
 
 
-top_domains = ["yahoo.com","aim.com", "aol.com","ski.com", "att.net", "juno.com", "frontier.com", "frontiernet.net", "bellsouth.net", "btinternet.com", "charter.net", "comcast.net", "cox.net", "earthlink.net", "gmail.com", "google.com", 
+top_domains = set(["yahoo.com","aim.com", "aol.com","ski.com", "att.net", "juno.com", "frontier.com", "frontiernet.net", "bellsouth.net", "btinternet.com", "charter.net", "comcast.net", "cox.net", "earthlink.net", "gmail.com", "google.com", 
     "googlemail.com", "icloud.com","qwest.net", "mac.com", "me.com", "msn.com", "optonline.net", "optusnet.com.au","cs.com", "qq.com", "q.com","rocketmail.com", "rogers.com", "sbcglobal.net", "shaw.ca", "sky.com", "sympatico.ca",
     "nyc.rr.com","roadrunner.com", "rr.com", "twc.com", "brighthouse.com", "rochester.rr.com","nc.rr.com", "socal.rr.com", "san.rr.com", "tampabay.rr.com",
     "twcny.rr.com", "satx.rr.com", "cfl.rr.com", "sc.rr.com", "neo.rr.com", "wi.rr.com","maine.rr.com",
@@ -2037,17 +2116,17 @@ top_domains = ["yahoo.com","aim.com", "aol.com","ski.com", "att.net", "juno.com"
     "countrywide.com","email.arizona.edu","netzero.net","du.edu","colorado.edu","bhfs.com","dpsk12.org","ecentral.com","centurylink.net","mindspring.com","law.du.edu","hollandhart.com", "bigpond.com", 
     "terra.com.br", "yahoo.it", "neuf.fr", "yahoo.de", "alice.it", "laposte.net", "facebook.com", "yahoo.in", "hotmail.es", "yahoo.ca", "yahoo.com.au", "rambler.ru", "hotmail.de","geocities.com","blackplanet.com","compuserve.com",
     "tiscali.it", "yahoo.co.jp", "freenet.de", "t-online.de", "aliceadsl.fr", "virgilio.it", "home.nl", "telenet.be", "yahoo.com.ar", "tiscali.co.uk", "yahoo.com.mx", "voila.fr", "gmx.net", "mail.com", "planet.nl", "tin.it", "live.it", 
-    "ntlworld.com", "arcor.de", "yahoo.co.id", "frontiernet.net", "hetnet.nl", "live.com.au", "yahoo.com.sg", "zonnet.nl", "club-internet.fr", "blueyonder.co.uk", "bluewin.ch", "skynet.be", "windstream.net", "centurytel.net", "chello.nl", "live.ca", "bigpond.net.au"]
-bad_phrases = ["fake@hotmail.com","politicalemail","example.com","no___reply","no__reply","no_reply","noreply","donotemail","fake@fake.com","fake.com","iwontreadyourshit@gmail.com","donotemailme@noname.com","smith@none.net","donotemail", "donotcontact", "fakeemail", 
-    "fake.com","123456","contoso.com", "noemail", "example.net", "example.org", "mailinator.com","none@none.com","none@noemail.com","none@gmail.com","none@email.com","none@no.com","none.com","none.co","no.com","no.co","none.com","noone.com"]
-suppress_domains_contains = ["mothershipstrategies.com","mainedems.org","endcitizensunited.org","hidebox","westrb","ovaki","congressional","congress","senate","nottrack","norack","mailinator","congress","senate","governor","steveodorisio.com","crestedbuttenews.com",
+    "ntlworld.com", "arcor.de", "yahoo.co.id", "frontiernet.net", "hetnet.nl", "live.com.au", "yahoo.com.sg", "zonnet.nl", "club-internet.fr", "blueyonder.co.uk", "bluewin.ch", "skynet.be", "windstream.net", "centurytel.net", "chello.nl", "live.ca", "bigpond.net.au"])
+bad_phrases = set(["fake","fuckoff","_","fuckyou","fuck","shit","politicalemail","example","catchall","*","no___reply","no__reply","no_reply","noreply","donotemail","iwontreadyourshit","donotemailme","noname","johnsmith","janedoe","loremipsum","donotemail", "donotcontact", "fakeemail", 
+    "123","123456","noemail", "none","no","noone","goaway","pissoff","fuckoff","fuckyou", "newsroom","press","no-reply","reply","notread"])
+suppress_domains_contains = set(["contoso.com","mailinator.com","mothershipstrategies.com","mainedems.org","endcitizensunited.org","hidebox","westrb","ovaki","congressional","congress","senate","nottrack","norack","mailinator","congress","senate","governor","steveodorisio.com","crestedbuttenews.com",
     "fox31.com","denvernewshd","aspendailynews","morgancarroll","leedriscoll.com","kazba.com","kazba.co","jenaforcolorado.com","johnwalshforcolorado.com","aschkinasi.com","kathleenformontana.com","kusterforcongress.com","audreyforcongress.com",
     "www.susieleeforcongress.com","hiral4congress.com","getthegreendeal.com","fortgangforassembly.com","tomohalleran.com","hiralforcongress.com","debbieforcongress.com","floridadems.org","cindyaxneforcongress.com","lindseysimmons.com",
     "bollierforkansas.com","wilmotcollins.com","teresaforall.com","ginaortizjones.com","jaredgoldenforcongress.com","yesonnationalpopularvote.com","droptheacalawsuit.com","montanademocrats.org","stephendaniel.com","ritahart.com",
     "votebymailpetition.com","teamsterpowerslate.com","griswoldataorcolorado.org ","xavierforvirginia.com","mivecinotogether.com","boebertmustgo.com","mindsovershootings.com","stewartnavarre.com","ridemocrats.org","denverdems.net",
     "jasonminnicozzi.com","tedescoforcongress.com","ballardataormontana.com","normoyleforcongress.com","matsuiforcongress.com","evertonblair.com","davidpeterson.us","electkatiedean.com","kenrussellforflorida.com","adamforcolorado.com",
     "drkathleenharder.com","marlinga4congress.com","cisconv.co","sarahmorgenthau.com","electblackwomenpac.com","sarahkleehoodny.com","sandeepfortexas.com","dcpa.org","healthnetco.com","educationnorthwest.org","denverwater.org",
-    "kiowacountyindependent.com","shermanhoward.com","jacksonkelly.com","boulderchamber.com","burgsimpson.com","irelandstapleton.com","googlegroups.com","re-law.com","broncos.nfl.net","mountainstatestoyota.com","rockymountainnews.com","westword.com","denverpost.com","dp.com"]
+    "kiowacountyindependent.com","shermanhoward.com","jacksonkelly.com","boulderchamber.com","burgsimpson.com","irelandstapleton.com","googlegroups.com","re-law.com","broncos.nfl.net","mountainstatestoyota.com","rockymountainnews.com","westword.com","denverpost.com","dp.com"])
 misspelled_tlds = {
     ".comf":".com",
     ".ocm":".com",
@@ -2088,6 +2167,7 @@ misspelled_domains = {
     "hotmial.com":"hotmail.com",
 
     #only valid gmail is gmail.com and googlemail.com
+
     "gmail.org":"gmail.com",
     "gmail.cm":"gmail.com",
     "gnaik.com":"gnaik.com",
@@ -2938,4 +3018,21 @@ person_format = {
     },
 
 
+    "card_type":{
+        "type":"str"
+    },
+    "apple_pay":{
+        "type":"bool"
+    },
+    "check_number":{
+        "type":"str"
+    },
+    "fee":{
+        "type":"float"
+    },
+
+
 }
+
+
+zip_codes_in_multiple_states = ["02861", "42223", "59221", "63673", "71749", "73949", "81137", "84536", "86044", "86515", "88063", "89439", "97635"]
